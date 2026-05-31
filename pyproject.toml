@@ -1,0 +1,11 @@
+[project]
+name = "pyscratch"
+version = "0.1.0"
+description = "Scratch-like Python API for children, backed by pygame."
+requires-python = ">=3.11"
+dependencies = [
+    "pygame>=2.6",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
