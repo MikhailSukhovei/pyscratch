@@ -4,6 +4,280 @@
 
 Идея такая: ты знаешь блоки Scratch, а здесь пишешь почти то же самое, только текстом на Python.
 
+## Карта блоков
+
+В таблицах ниже собраны SVG-блоки из `images/motion` и `images/looks`. Если блок уже есть в `pyscratch`, ссылка ведет к описанию ниже. Если API для блока еще нет, указано `В разработке`.
+
+### Motion / Движение
+
+<table>
+<thead>
+<tr>
+<th>Scratch-блок</th>
+<th>pyscratch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#spritemove_stepssteps"><img src="images/motion/move_10_steps.svg" alt="move 10 steps" height="34"></a></td>
+<td><a href="#spritemove_stepssteps"><code>sprite.move_steps(10)</code></a></td>
+</tr>
+<tr>
+<td><a href="#spriteturn_rightdegrees"><img src="images/motion/turn_cw_15_degrees.svg" alt="turn clockwise 15 degrees" height="34"></a></td>
+<td><a href="#spriteturn_rightdegrees"><code>sprite.turn_right(15)</code></a></td>
+</tr>
+<tr>
+<td><a href="#spriteturn_leftdegrees"><img src="images/motion/turn_ccw_15_degrees.svg" alt="turn counterclockwise 15 degrees" height="34"></a></td>
+<td><a href="#spriteturn_leftdegrees"><code>sprite.turn_left(15)</code></a></td>
+</tr>
+<tr>
+<td><img src="images/motion/go_to_random_position.svg" alt="go to random position" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/motion/go_to_mouse_pointer.svg" alt="go to mouse pointer" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/motion/go_to_sprite.svg" alt="go to sprite" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><a href="#spritego_tox-y"><img src="images/motion/go_to_x_0_y_0.svg" alt="go to x 0 y 0" height="34"></a></td>
+<td><a href="#spritego_tox-y"><code>sprite.go_to(0, 0)</code></a></td>
+</tr>
+<tr>
+<td><img src="images/motion/glide_1_secs_to_random_position.svg" alt="glide 1 seconds to random position" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/motion/glide_1_secs_to_mouse_pointer.svg" alt="glide 1 seconds to mouse pointer" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/motion/glide_1_secs_to_sprite.svg" alt="glide 1 seconds to sprite" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/motion/glide_1_secs_to_x_0_y_0.svg" alt="glide 1 seconds to x 0 y 0" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><a href="#spritepoint_in_directiondegrees"><img src="images/motion/point_in_direction_90.svg" alt="point in direction 90" height="34"></a></td>
+<td><a href="#spritepoint_in_directiondegrees"><code>sprite.point_in_direction(90)</code></a></td>
+</tr>
+<tr>
+<td><img src="images/motion/point_towards_mouse_pointer.svg" alt="point towards mouse pointer" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/motion/point_towards_sprite.svg" alt="point towards sprite" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><a href="#spritechange_x_byvalue"><img src="images/motion/change_x_by_10.svg" alt="change x by 10" height="34"></a></td>
+<td><a href="#spritechange_x_byvalue"><code>sprite.change_x_by(10)</code></a></td>
+</tr>
+<tr>
+<td><a href="#spriteset_xvalue"><img src="images/motion/set_x_to_0.svg" alt="set x to 0" height="34"></a></td>
+<td><a href="#spriteset_xvalue"><code>sprite.set_x(0)</code></a></td>
+</tr>
+<tr>
+<td><a href="#spritechange_y_byvalue"><img src="images/motion/change_y_by_10.svg" alt="change y by 10" height="34"></a></td>
+<td><a href="#spritechange_y_byvalue"><code>sprite.change_y_by(10)</code></a></td>
+</tr>
+<tr>
+<td><a href="#spriteset_yvalue"><img src="images/motion/set_y_to_0.svg" alt="set y to 0" height="34"></a></td>
+<td><a href="#spriteset_yvalue"><code>sprite.set_y(0)</code></a></td>
+</tr>
+<tr>
+<td><a href="#spriteif_on_edge_bounce"><img src="images/motion/if_on_edge_bounce.svg" alt="if on edge bounce" height="34"></a></td>
+<td><a href="#spriteif_on_edge_bounce"><code>sprite.if_on_edge_bounce()</code></a></td>
+</tr>
+<tr>
+<td><img src="images/motion/set_rotation_style_left_right.svg" alt="set rotation style left right" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/motion/set_rotation_style_dont_rotate.svg" alt="set rotation style don't rotate" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/motion/set_rotation_style_all_around.svg" alt="set rotation style all around" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><a href="#spritename"><img src="images/motion/x_position.svg" alt="x position" height="34"></a></td>
+<td><a href="#spritename"><code>sprite.x</code></a></td>
+</tr>
+<tr>
+<td><a href="#spritename"><img src="images/motion/y_position.svg" alt="y position" height="34"></a></td>
+<td><a href="#spritename"><code>sprite.y</code></a></td>
+</tr>
+<tr>
+<td><a href="#spritepoint_in_directiondegrees"><img src="images/motion/direction.svg" alt="direction" height="34"></a></td>
+<td><a href="#spritepoint_in_directiondegrees"><code>sprite.direction</code></a></td>
+</tr>
+</tbody>
+</table>
+
+### Looks / Внешний вид
+
+<table>
+<thead>
+<tr>
+<th>Scratch-блок</th>
+<th>pyscratch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="images/looks/say_hello.svg" alt="say hello" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/say_hello_for_2_seconds.svg" alt="say hello for 2 seconds" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/think_hmm.svg" alt="think hmm" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/think_hmm_for_2_seconds.svg" alt="think hmm for 2 seconds" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><a href="#spriteshow"><img src="images/looks/show.svg" alt="show" height="34"></a></td>
+<td><a href="#spriteshow"><code>sprite.show()</code></a></td>
+</tr>
+<tr>
+<td><a href="#spritehide"><img src="images/looks/hide.svg" alt="hide" height="34"></a></td>
+<td><a href="#spritehide"><code>sprite.hide()</code></a></td>
+</tr>
+<tr>
+<td><a href="#spriteswitch_costume_tocostume"><img src="images/looks/switch_costume_to_costume1.svg" alt="switch costume to costume1" height="34"></a></td>
+<td><a href="#spriteswitch_costume_tocostume"><code>sprite.switch_costume_to("costume1")</code></a></td>
+</tr>
+<tr>
+<td><a href="#spritenext_costume"><img src="images/looks/next_costume.svg" alt="next costume" height="34"></a></td>
+<td><a href="#spritenext_costume"><code>sprite.next_costume()</code></a></td>
+</tr>
+<tr>
+<td><img src="images/looks/switch_backdrop_to_backdrop1.svg" alt="switch backdrop to backdrop1" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/next_backdrop.svg" alt="next backdrop" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><a href="#spritechange_size_byvalue"><img src="images/looks/change_size_by_10.svg" alt="change size by 10" height="34"></a></td>
+<td><a href="#spritechange_size_byvalue"><code>sprite.change_size_by(10)</code></a></td>
+</tr>
+<tr>
+<td><a href="#spriteset_size_tovalue"><img src="images/looks/set_size_to_100_percent.svg" alt="set size to 100 percent" height="34"></a></td>
+<td><a href="#spriteset_size_tovalue"><code>sprite.set_size_to(100)</code></a></td>
+</tr>
+<tr>
+<td><img src="images/looks/change_color_effect_by_25.svg" alt="change color effect by 25" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/set_color_effect_to_0.svg" alt="set color effect to 0" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/change_fisheye_effect_by_25.svg" alt="change fisheye effect by 25" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/set_fisheye_effect_to_0.svg" alt="set fisheye effect to 0" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/change_whirl_effect_by_25.svg" alt="change whirl effect by 25" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/set_whirl_effect_to_0.svg" alt="set whirl effect to 0" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/change_pixelate_effect_by_25.svg" alt="change pixelate effect by 25" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/set_pixelate_effect_to_0.svg" alt="set pixelate effect to 0" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/change_mosaic_effect_by_25.svg" alt="change mosaic effect by 25" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/set_mosaic_effect_to_0.svg" alt="set mosaic effect to 0" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/change_brightness_effect_by_25.svg" alt="change brightness effect by 25" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/set_brightness_effect_to_0.svg" alt="set brightness effect to 0" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/change_ghost_effect_by_25.svg" alt="change ghost effect by 25" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/set_ghost_effect_to_0.svg" alt="set ghost effect to 0" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/clear_graphic_effects.svg" alt="clear graphic effects" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/go_to_front_layer.svg" alt="go to front layer" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/go_to_back_layer.svg" alt="go to back layer" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/go_forward_1_layers.svg" alt="go forward 1 layers" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/go_backward_1_layers.svg" alt="go backward 1 layers" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><a href="#spritecostume_number"><img src="images/looks/costume_number.svg" alt="costume number" height="34"></a></td>
+<td><a href="#spritecostume_number"><code>sprite.costume_number</code></a></td>
+</tr>
+<tr>
+<td><a href="#spritecostume_name"><img src="images/looks/costume_name.svg" alt="costume name" height="34"></a></td>
+<td><a href="#spritecostume_name"><code>sprite.costume_name</code></a></td>
+</tr>
+<tr>
+<td><img src="images/looks/backdrop_number.svg" alt="backdrop number" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><img src="images/looks/backdrop_name.svg" alt="backdrop name" height="34"></td>
+<td>В разработке</td>
+</tr>
+<tr>
+<td><a href="#spriteset_size_tovalue"><img src="images/looks/size.svg" alt="size" height="34"></a></td>
+<td><a href="#spriteset_size_tovalue"><code>sprite.size</code></a></td>
+</tr>
+</tbody>
+</table>
+
 ## Самый маленький пример
 
 ```python
