@@ -34,6 +34,47 @@ class RuntimeTest(unittest.TestCase):
 
         self.assertEqual(sprite.x, 3)
 
+    def test_while_true_script_keeps_running_cooperatively(self):
+        stage = Stage(fps=10)
+        sprite = stage.add(Sprite("Cat"))
+
+        @sprite.when_green_flag_clicked
+        def walk():
+            while True:
+                sprite.change_x_by(1)
+                wait(0.1)
+
+        stage.run_for(0.5)
+
+        self.assertEqual(sprite.x, 3)
+
+    def test_while_true_without_wait_yields_each_iteration(self):
+        stage = Stage(fps=10)
+        sprite = stage.add(Sprite("Cat"))
+
+        @sprite.when_green_flag_clicked
+        def walk():
+            while True:
+                sprite.change_x_by(1)
+
+        stage.run_for(0.5)
+
+        self.assertEqual(sprite.x, 5)
+
+    def test_for_range_script_runs_commands(self):
+        stage = Stage(fps=10)
+        sprite = stage.add(Sprite("Cat"))
+
+        @sprite.when_green_flag_clicked
+        def walk():
+            for _ in range(3):
+                sprite.change_x_by(2)
+                wait(0.1)
+
+        stage.run_for(1)
+
+        self.assertEqual(sprite.x, 6)
+
     def test_sprite_bounces_from_right_edge_and_continues_left(self):
         stage = Stage(width=100, height=100, fps=10)
         sprite = stage.add(Sprite("Cat", x=45, direction=90))

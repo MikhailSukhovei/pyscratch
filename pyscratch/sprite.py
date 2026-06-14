@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import inspect
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from math import cos, radians, sin
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from .commands import Call, Command
 from .collision import Circle
+from .scripts import script as compile_script
 
 if TYPE_CHECKING:
     from .runtime import Stage
@@ -22,13 +25,54 @@ class Sprite:
     size: float = 100
     color: tuple[int, int, int] = (255, 170, 40)
     costume: str | None = None
+    costumes: dict[int, str] = field(default_factory=dict)
+    costume_number: int = 1
     collision_radius: float = 20
     stage: "Stage | None" = None
     green_flag_scripts: list[Callable[[], object]] = field(default_factory=list)
+    _costume_base_path: Path = field(init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        self._costume_base_path = _caller_directory()
+        self.costumes = self._normalize_costumes(self.costumes)
+
+        if self.costume is not None:
+            self.costume = self._normalize_costume_path(self.costume)
+
+        if self.costumes:
+            if self.costume_number not in self.costumes:
+                if self.costume_number == 1:
+                    self.costume_number = sorted(self.costumes)[0]
+                else:
+                    raise ValueError(
+                        f"Sprite {self.name!r} has no costume number "
+                        f"{self.costume_number}."
+                    )
+            self.costume = self.costumes[self.costume_number]
+
+    @property
+    def costume_name(self) -> str | None:
+        path = self.current_costume_path
+        if path is None:
+            return None
+        return Path(path).stem
+
+    @property
+    def current_costume_path(self) -> str | None:
+        if self.costumes:
+            try:
+                return self.costumes[self.costume_number]
+            except KeyError as exc:
+                raise ValueError(
+                    f"Sprite {self.name!r} has no costume number "
+                    f"{self.costume_number}."
+                ) from exc
+        return self.costume
 
     def when_green_flag_clicked(self, script: Callable[[], object]) -> Callable[[], object]:
-        self.green_flag_scripts.append(script)
-        return script
+        compiled_script = compile_script(script)
+        self.green_flag_scripts.append(compiled_script)
+        return compiled_script
 
     def move_steps(self, steps: float) -> Command:
         return Call(lambda: self._move_steps(steps))
@@ -111,11 +155,82 @@ class Sprite:
     def _set_size_to(self, value: float) -> None:
         self.size = value
 
-    def switch_costume_to(self, path: str) -> Command:
-        return Call(lambda: self._switch_costume_to(path))
+    def switch_costume_to(self, costume: int | str) -> Command:
+        return Call(lambda: self._switch_costume_to(costume))
 
-    def _switch_costume_to(self, path: str) -> None:
-        self.costume = path
+    def _switch_costume_to(self, costume: int | str) -> None:
+        if isinstance(costume, int):
+            if not self.costumes:
+                if costume == self.costume_number:
+                    return
+                raise ValueError(
+                    f"Sprite {self.name!r} has no costume number {costume}."
+                )
+            self._switch_costume_number_to(costume)
+            return
+
+        if self.costumes:
+            self._switch_costume_named(costume)
+            return
+
+        self.costume = self._normalize_costume_path(costume)
+
+    def next_costume(self) -> Command:
+        return Call(self._next_costume)
+
+    def _next_costume(self) -> None:
+        if not self.costumes:
+            return
+
+        numbers = sorted(self.costumes)
+        try:
+            index = numbers.index(self.costume_number)
+        except ValueError:
+            index = -1
+        self._switch_costume_number_to(numbers[(index + 1) % len(numbers)])
+
+    def _switch_costume_number_to(self, number: int) -> None:
+        if number not in self.costumes:
+            raise ValueError(f"Sprite {self.name!r} has no costume number {number}.")
+
+        self.costume_number = number
+        self.costume = self.costumes[number]
+
+    def _switch_costume_named(self, name: str) -> None:
+        normalized_name = self._normalize_costume_path(name)
+        matches = [
+            number
+            for number, path in self.costumes.items()
+            if name in {path, Path(path).name, Path(path).stem}
+            or normalized_name == path
+        ]
+        if not matches:
+            raise ValueError(f"Sprite {self.name!r} has no costume named {name!r}.")
+        if len(matches) > 1:
+            raise ValueError(f"Sprite {self.name!r} has several costumes named {name!r}.")
+
+        self._switch_costume_number_to(matches[0])
+
+    def _normalize_costumes(self, costumes: dict[int, str]) -> dict[int, str]:
+        normalized: dict[int, str] = {}
+        for number, path in costumes.items():
+            if not isinstance(number, int):
+                raise TypeError(
+                    f"Costume number for sprite {self.name!r} must be an integer."
+                )
+            if number < 1:
+                raise ValueError(
+                    f"Costume number for sprite {self.name!r} must be 1 or greater."
+                )
+            normalized[number] = self._normalize_costume_path(path)
+
+        return normalized
+
+    def _normalize_costume_path(self, path: str) -> str:
+        costume_path = Path(path)
+        if not costume_path.is_absolute():
+            costume_path = self._costume_base_path / costume_path
+        return str(costume_path.resolve())
 
     def collision_circle(self) -> "Circle":
         return Circle(self.x, self.y, self.collision_radius * self.size / 100)
@@ -161,3 +276,20 @@ class Sprite:
 
         if bounced:
             self.direction %= 360
+
+
+def _caller_directory() -> Path:
+    pyscratch_file = Path(__file__).resolve()
+    frame = inspect.currentframe()
+    try:
+        while frame is not None:
+            filename = frame.f_code.co_filename
+            if filename != "<string>":
+                path = Path(filename)
+                if path.exists() and path.resolve() != pyscratch_file:
+                    return path.resolve().parent
+            frame = frame.f_back
+    finally:
+        del frame
+
+    return Path.cwd()

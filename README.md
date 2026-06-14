@@ -123,6 +123,34 @@ def start():
     )
 ```
 
+## Клавиатура
+
+Для клавиатуры можно напрямую использовать библиотеку `keyboard`.
+
+```python
+import keyboard
+
+from pyscratch import Sprite, Stage
+
+stage = Stage()
+cat = stage.add(Sprite("Cat"))
+
+
+@cat.when_green_flag_clicked
+def control():
+    while True:
+        if keyboard.is_pressed("right"):
+            cat.change_x_by(5)
+        if keyboard.is_pressed("left"):
+            cat.change_x_by(-5)
+
+
+stage.play()
+```
+
+Это обычная Python-библиотека, поэтому можно использовать и другие ее возможности:
+`keyboard.is_pressed(...)`, `keyboard.write(...)`, `keyboard.add_hotkey(...)`.
+
 ## Движение
 
 ### `sprite.move_steps(steps)`
@@ -281,12 +309,63 @@ cat.set_size_to(100)
 
 `100` - обычный размер.
 
-### `sprite.switch_costume_to(path)`
+### `Sprite(name, costumes={...})`
+
+Создать спрайт с несколькими костюмами.
+
+```python
+cat = Sprite(
+    "Cat",
+    costumes={
+        1: "cat/costume1.svg",
+        2: "cat/costume2.svg",
+    },
+)
+```
+
+Относительные пути считаются от файла, где создан спрайт.
+
+### `sprite.switch_costume_to(costume)`
 
 Выбрать картинку для спрайта.
 
 ```python
-cat.switch_costume_to("assets/cat.png")
+cat.switch_costume_to(2)
+cat.switch_costume_to("costume1")
+cat.switch_costume_to("cat/costume2.svg")
+```
+
+Можно по-прежнему использовать один путь без словаря:
+
+```python
+cat = Sprite("Cat", costume="assets/cat.png")
+cat.switch_costume_to("assets/cat2.png")
+```
+
+### `sprite.next_costume()`
+
+Перейти к следующему костюму.
+
+```python
+cat.next_costume()
+```
+
+### `sprite.costume_number`
+
+Номер текущего костюма.
+
+```python
+if cat.costume_number == 2:
+    cat.turn_right(15)
+```
+
+### `sprite.costume_name`
+
+Имя текущего костюма без расширения файла.
+
+```python
+if cat.costume_name == "costume2":
+    cat.hide()
 ```
 
 ## Управление
@@ -367,6 +446,7 @@ return forever(
 - показать и спрятать спрайт;
 - размер спрайта;
 - картинка-костюм;
+- клавиатура через библиотеку `keyboard`;
 - ожидание;
 - повторение команд;
 - бесконечный цикл;
@@ -376,7 +456,7 @@ return forever(
 
 Пока еще не добавлены:
 
-- клавиатура и мышь;
+- мышь;
 - сообщения `broadcast`;
 - звуки;
 - переменные в стиле Scratch;

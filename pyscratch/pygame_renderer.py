@@ -141,13 +141,21 @@ class PygameRenderer:
         return RenderState(sprite.x, sprite.y, sprite.direction, sprite.size)
 
     def _sprite_surface(self, sprite: "Sprite") -> Any:
-        if sprite.costume:
-            return self._load_costume(sprite.costume)
+        costume = sprite.current_costume_path
+        if costume:
+            return self._load_costume(costume)
         return self._default_surface(sprite)
 
     def _load_costume(self, path: str) -> Any:
         if path not in self._costumes:
-            image = self.pygame.image.load(Path(path)).convert_alpha()
+            costume_path = Path(path)
+            if not costume_path.exists():
+                raise FileNotFoundError(f"Costume file not found: {costume_path}")
+
+            try:
+                image = self.pygame.image.load(costume_path).convert_alpha()
+            except self.pygame.error as exc:
+                raise RuntimeError(f"Could not load costume image: {costume_path}") from exc
             self._costumes[path] = image
         return self._costumes[path]
 

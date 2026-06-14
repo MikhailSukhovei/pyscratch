@@ -39,14 +39,15 @@ This gives a Scratch-like mental model without exposing `asyncio`:
 ```python
 @cat.when_green_flag_clicked
 def main():
-    return forever(
-        cat.move_steps(10),
-        cat.if_on_edge_bounce(),
-        wait(0.1),
-    )
+    while True:
+        cat.move_steps(10)
+        cat.if_on_edge_bounce()
+        wait(0.1)
 ```
 
-Internally, `forever`, `repeat`, `wait`, and timed motion are represented as commands. The runtime advances them once per frame.
+Event scripts are compiled into generator tasks when they are registered. The compiler rewrites expression statements that produce commands into `yield from command.run()` calls, and it adds a cooperative yield to each `while` and `for` loop iteration. This lets beginner code use normal Python loops such as `while True:` and `for _ in range(10):` without blocking the pygame loop.
+
+Internally, `forever`, `repeat`, `wait`, and timed motion are still represented as commands. The old `return forever(...)` style remains a compatibility layer over the same runtime.
 
 ## Rendering layer
 
@@ -72,7 +73,9 @@ Rendering also interpolates between the previous and current simulation states. 
 
 Scratch coordinates are kept in the model: `(0, 0)` is the center of the stage, `x` grows to the right, and `y` grows upward. The pygame renderer converts that to screen coordinates at the last moment.
 
-Sprites can be drawn from a costume image path or as a simple generated placeholder. This keeps early examples runnable before asset management exists.
+Sprites can be drawn from a single costume image path, a numbered `costumes` mapping, or as a simple generated placeholder. Relative costume paths are resolved from the Python file that creates the sprite, so the beginner project model can keep assets next to each sprite file without depending on the current working directory.
+
+Costume switching is part of the sprite model, not the renderer. The renderer asks for the sprite's current costume path; the sprite owns `costume_number`, `costume_name`, `switch_costume_to(...)`, and `next_costume()`.
 
 ## Collision layer
 
@@ -107,11 +110,13 @@ For more Scratch-like costume collisions, add an optional mask-based narrow phas
 
 Start with the stable core:
 
-- Events: green flag, key pressed, clicked, message received.
+- Events: green flag, clicked, message received.
 - Motion: move, turn, go to, change/set x/y, point in direction, edge bounce.
 - Looks: show/hide, costume, size, say/think for seconds.
 - Control: wait, repeat, forever, if, if-else, wait until, stop this script.
-- Sensing: touching edge/sprite/color, key pressed, mouse position.
+- Sensing: touching edge/sprite/color, mouse position.
+- Keyboard: expose the real third-party `keyboard` library directly instead of
+  wrapping it in Scratch-like key-pressed blocks.
 - Operators: mostly use normal Python operators; only add functions where Scratch semantics differ.
 - Variables/lists: use Python variables first; add teaching helpers later only if needed.
 - Broadcast: message bus inside one stage.
